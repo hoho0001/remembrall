@@ -15,7 +15,11 @@ html{
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  min-height: 99%;
+  min-height: 99%;  
+}
+
+#noteAdding{
+  padding: 10px;
 }
 
 .hide{
@@ -26,10 +30,51 @@ html{
   /* position: fixed; */
   left: 0px;
   top: 0px;
-  height: 50px;
+  height: 100px;
   width: 100%;
-  background-color: purple;
+  background-color: #222;
 }
-.page{
+h1{
+  text-align: center;
+  color: azure;
+}
+.noteList{
+  list-style: none;
+  width: 600px;
+  margin: auto;
+  padding-bottom: 1rem;
+}
+.noteItem{
+  width: 100%;
+  border: 1px solid #aaa;
+  display: grid;
+  grid-template-areas: "a b c";
+  grid-template-columns: 1.9fr 0.6fr 0.5fr;
+}
+.remove{
+  grid-area: c;
+  /* float: left;
+  overflow: hidden;
+  width: 80px; */
+  margin: 0.5rem;
+}
+.noteTitle{
+  color: #333;
+  grid-area: a;
+  margin: 0.5rem;
+}
+.noteCreatedDate{
+  color: #333;
+  grid-area: b;
+  margin: 0.5rem 0 ;
 
+}
+.highlight{
+  background-color: lightpink;
+}
+.material-icons{
+  font-size: 2rem;
+}
+.material-icons:active{
+  color: orange;
 }
