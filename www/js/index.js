@@ -73,14 +73,14 @@ let app = {
       let noteOptions = {
         id: id,
         title: title,
-        every: "year",
-        // text: content,
         at: remindDate.toJSDate(),
         badge: 1,
         data: createDate.toMillis()
       };
 
       cordova.plugins.notification.local.schedule(noteOptions, app.createNotePage);
+      navigator.notification.alert("Added notification id " + id);
+
     }
   },
   removeNoteConfirmation: function(ev){
@@ -132,16 +132,19 @@ let app = {
         let div = document.createElement('div');
         let title = document.createElement('h3');
         let createdDate = document.createElement('h4');
-        // let text = document.createElement('p');
+        
         let button = document.createElement('img');
         createdDate.textContent = luxon.DateTime.fromMillis(parseInt(element.data)).toLocaleString({ month: 'short', day: '2-digit' }); //=> 'April 20';
+        let remindDate = luxon.DateTime.fromSeconds(element.at).toLocaleString(luxon.DateTime.DATETIME_FULL); //=> 4/20/2017, 11:32 AM'
         
         title.textContent = element.title;
 
         div.className = "noteItem";
-        div.setAttribute('data-id', element.id);
+        title.setAttribute('data-id', element.id);
         title.className = 'noteTitle';
+        title.setAttribute('remindDate', remindDate);
         createdDate.className = 'noteCreatedDate';
+        
         button.src = 'img/baseline_delete_outline_black_36dp.png';
         button.className = "remove";
         button.id = 'remove-btn';
@@ -152,12 +155,20 @@ let app = {
         div.appendChild(title);
         div.appendChild(createdDate);
         
+        
         df.appendChild(div);
         button.addEventListener("click", app.removeNoteConfirmation);
+        title.addEventListener("click", app.showRemindDate);
+
       });
       page.appendChild(df);
     });
     app.navigation("noteList");
+  },
+  showRemindDate: function(ev){
+    ev.preventDefault();
+    navigator.notification.alert("Schedule at: " + ev.currentTarget.getAttribute('remindDate'));
+    app.highlightItem(ev.currentTarget.getAttribute('data-id'));
   },
   autoaddNote: function () {
     let inOneMin = new Date();
@@ -179,7 +190,7 @@ let app = {
   highlightItem: function (id) {
     document.querySelectorAll('.noteItem').forEach( item => {
       item.classList.remove('highlight');
-      if ( item.getAttribute('data-id') == id ){
+      if ( item.querySelector('.noteTitle').getAttribute('data-id') == id ){
         item.classList.add('highlight');
       }
     });
