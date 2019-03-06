@@ -37,23 +37,22 @@
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <title>Remembrall</title>
     </head>
-    <body>
+    <body ontouchstart="">
         <div id="header">
-            <button id="add-btn">Add Notificaticon</button>
-            <!-- <button id="list-btn">List Notificaticon</button> -->
-            <button id="autoadd-btn">Add minute Notificaticon</button>
-            <h1>Notifications</h1>
+            <a href="#" id="back-btn" class="btn"><</a>
+            <div><h2>Notifications</h2></div>
+            <a href="#" id="add-btn" class="btn">+</a>
         </div>
         <div id="noteList" class="page flexcontainer">
-            
         </div>
+        
         <div id="noteAdding" class="page">
-            Title:
-            <input type="text" id="title" maxlength="100"><br>
-            Date:
-            <input type="date" id="date"><br>
-            <button id="create-btn">Create Notification</button>
-            <button id="back-btn">Cancel</button>
+            <div>
+            <input type="text" id="title" maxlength="100" placeholder="Notice message"></div>
+            <div id="formDate">
+            <input type="date" id="date"></div>
+          <div id='formButtons'><button id="cancel-btn">Cancel</button>
+            <button id="create-btn">Create</button></div>
         </div>
 
         <script type="text/javascript" src="cordova.js"></script>

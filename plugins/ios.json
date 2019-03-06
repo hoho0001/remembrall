@@ -15,6 +15,9 @@
     },
     "cordova-plugin-dialogs": {
       "PACKAGE_NAME": "ca.edumedia.hoho0001.rem"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "ca.edumedia.hoho0001.rem"
     }
   },
   "dependent_plugins": {

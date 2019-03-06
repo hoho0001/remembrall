@@ -19,7 +19,7 @@ html{
 }
 
 #noteAdding{
-  padding: 10px;
+  padding: 20px;
 }
 
 .hide{
@@ -27,16 +27,34 @@ html{
 }
 
 #header{
-  /* position: fixed; */
+  position: fixed;
+  z-index:2;
   left: 0px;
   top: 0px;
-  height: 100px;
+  height: 60px;
   width: 100%;
-  background-color: #222;
+  padding: 0;
+  background-color: hsl(0, 100%, 80%);
 }
-h1{
+body {
+  z-index:1;
+  width:100%;
+  background:#aaa;
+}
+
+.page {
+  position:absolute;
+  top:60px;
+  z-index:1;
+  width:100%;
+  padding:0;
+  -webkit-overflow-scrolling:touch;
+  overflow:auto;
+}
+
+h2{
   text-align: center;
-  color: azure;
+  margin: 8px auto;
 }
 .noteList{
   list-style: none;
@@ -49,14 +67,11 @@ h1{
   border: 1px solid #aaa;
   display: grid;
   grid-template-areas: "a b c";
-  grid-template-columns: 1.9fr 0.6fr 0.5fr;
+  grid-template-columns: 2.1fr 0.6fr 0.3fr;
 }
 .remove{
   grid-area: c;
-  /* float: left;
-  overflow: hidden;
-  width: 80px; */
-  margin: 0.5rem;
+  margin: auto 0.5rem;
 }
 .noteTitle{
   color: #333;
@@ -66,15 +81,56 @@ h1{
 .noteCreatedDate{
   color: #333;
   grid-area: b;
-  margin: 0.5rem 0 ;
+  margin: auto 0 ;
 
 }
 .highlight{
-  background-color: lightpink;
+  background-color:hsl(0, 100%, 90%);
 }
-.material-icons{
-  font-size: 2rem;
+input {
+  font-size: 1rem;
+  width: 100%;
+  padding: 0rem 0.5rem;
+  height: 2rem;
+  margin-bottom: 0.5rem;
 }
-.material-icons:active{
-  color: orange;
+button {
+  font-size: 1rem;
+  padding: 0.5rem;
+  /* color: azure; */
+  background-color: hsl(0, 100%, 80%);
+  margin: 0.5rem;
+  text-align: center;
+  border: 1px solid hsl(0, 100%, 90%);
+  border-radius:20px;
 }
+
+#back-btn{
+	position:absolute;
+	top:-5px;
+  left:15px;
+  color: hsl(0, 100%, 60%);
+	/* border-radius:50px; */
+  font-size: 40px;
+  /* font-weight: 700; */
+  text-decoration: none;
+}
+#add-btn{
+    position: absolute;;
+    top:-5px;
+    right:15px;
+    color: hsl(0, 100%, 60%);
+    /* border-radius:50px; */
+      font-size: 40px;
+      /* font-weight: 700; */
+      text-decoration: none;
+  }
+a:active{
+    color: yellow;
+  }
+#formButtons,
+#formDate{
+  text-align: center;
+}
+
+

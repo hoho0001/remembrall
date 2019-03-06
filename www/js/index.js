@@ -1,17 +1,3 @@
-// Local Notifications:
-// https://www.npmjs.com/package/de.appplant.cordova.plugin.local-notification/v/0.8.5
-// https://github.com/katzer/cordova-plugin-local-notifications/wiki - reference
-// https://github.com/katzer/cordova-plugin-local-notifications - beware the ReadMe file. This is v0.9.0-beta
-
-// Installation
-// cordova plugin add de.appplant.cordova.plugin.local-notification
-
-//Build (XCode 10 causes build issues for iOS so it needs the --buildFlag)
-// cordova emulate ios --target="iPhone-8, 12.0" --buildFlag="-UseModernBuildSystem=0"
-
-// Dialogs:
-// https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-dialogs/index.html
-
 let app = {
   deletedItem: null,
   init: function () {
@@ -23,10 +9,10 @@ let app = {
   },
   addListeners: function () {
     document.querySelector("#add-btn").addEventListener("click", app.addNotePage);
-    document.querySelector("#autoadd-btn").addEventListener("click", app.autoaddNote);
-    // document.querySelector("#list-btn").addEventListener("click", app.createNotePage);
+    // document.querySelector("#autoadd-btn").addEventListener("click", app.autoaddNote);
     document.querySelector("#create-btn").addEventListener("click", app.addNote);
     document.querySelector("#back-btn").addEventListener("click", app.goHome);
+    document.querySelector("#cancel-btn").addEventListener("click", app.goHome);
     cordova.plugins.notification.local.on("click", function (notification) {
       navigator.notification.alert("clicked: " + notification.id);
       //user has clicked on the popped up notification
@@ -36,7 +22,6 @@ let app = {
       
       cordova.plugins.notification.local.cancel(notification.id);
       cordova.plugins.notification.local.schedule(notification, app.createNotePage);
-      app.highlightItem(notification.id);
     });
     cordova.plugins.notification.local.on("trigger", function (notification) {
       //added to the notification center on the date to trigger it.
@@ -52,12 +37,10 @@ let app = {
 
   addNotePage: function(){
     app.navigation("noteAdding");
-  
-      document.querySelector("#header h1").textContent ="Add Notification";
-      document.getElementById("add-btn").classList.add('hide');
-  
+    app.setHeader('noteAdding');
+
     document.getElementById('title').value = '';
-    document.getElementById('date').value = '';
+    document.getElementById('date').valueAsDate = new Date();
   },
   addNote: function (ev) {
     let id = new Date().getMilliseconds();
@@ -82,7 +65,7 @@ let app = {
 
       if( createDate.diffNow('days') > 7 ){
         // console.log("Plus 7 days");
-        remindDate = createDate.plus({ days: -7 }); // alert before 7 days
+        remindDate = createDate.minus({ days: 7 }); // alert before 7 days
       }else {
         // console.log("Plus 7 days 1 years");
         remindDate = createDate.plus({ years: 1 , days: -7 }) // alert before 7 days,  next year
@@ -104,10 +87,10 @@ let app = {
     ev.preventDefault();
     deletedItem = ev.currentTarget.getAttribute('data-id');
     app.highlightItem(deletedItem);
-    navigator.notification.confirm(`Remove the notification id: ${deletedItem} ?` , app.cancelNote, "Remove", ['Remove', 'Cancel']);
+    navigator.notification.confirm(`Remove the notification id: ${deletedItem} ?` , app.cancelNote, "Remove", ['Cancel', 'Remove']);
   },
   cancelNote: function(buttonIndex){
-    if (buttonIndex === 1 ){
+    if (buttonIndex === 2 ){
       cordova.plugins.notification.local.cancel(deletedItem,function() {
        app.createNotePage();
       });
@@ -115,14 +98,23 @@ let app = {
   },
   goHome: function () {
     app.navigation("noteList");
-    document.querySelector("#header h1").textContent ="Notifications";
-    document.getElementById("add-btn").classList.remove('hide');
+    app.setHeader('noteList');
+  },
+  setHeader: function(page){
+
+    if(page == "noteList"){
+      document.querySelector("#header h2").textContent ="Notifications";
+      document.getElementById("add-btn").classList.remove('hide');
+      document.getElementById("back-btn").classList.add('hide');
+    } else if (page == "noteAdding"){
+      document.querySelector("#header h2").textContent ="Add Notification";
+      document.getElementById("add-btn").classList.add('hide');
+      document.getElementById("back-btn").classList.remove('hide');
+    }
   },
   
   createNotePage: function () {
-    document.querySelector("#header h1").textContent ="Notifications";
-    document.getElementById("add-btn").classList.remove('hide');
-
+    app.setHeader('noteList');
     let page = document.getElementById('noteList');
     let df = new DocumentFragment();
     page.innerHTML = "";
@@ -141,7 +133,7 @@ let app = {
         let title = document.createElement('h3');
         let createdDate = document.createElement('h4');
         // let text = document.createElement('p');
-        let button = document.createElement('i');
+        let button = document.createElement('img');
         createdDate.textContent = luxon.DateTime.fromMillis(parseInt(element.data)).toLocaleString({ month: 'short', day: '2-digit' }); //=> 'April 20';
         
         title.textContent = element.title;
@@ -150,10 +142,11 @@ let app = {
         div.setAttribute('data-id', element.id);
         title.className = 'noteTitle';
         createdDate.className = 'noteCreatedDate';
-        button.textContent = 'delete_outline';
-        button.className = "material-icons remove";
-        button.id = 'play-btn';
+        button.src = 'img/baseline_delete_outline_black_36dp.png';
+        button.className = "remove";
+        button.id = 'remove-btn';
         button.setAttribute('data-id', element.id);
+        button.alt = "remove";
 
         div.appendChild(button);
         div.appendChild(title);
